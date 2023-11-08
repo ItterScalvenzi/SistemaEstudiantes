@@ -106,8 +106,32 @@ public class EstudianteDAO {
 				System.out.println("Error al cerrar la conexión : " +e.getMessage());;
 			}
 		}
+	}
+	
+	public void modificarEstudiante(Estudiante estudiante) {
+		PreparedStatement statement;
 		
-		
+		Connection con = getConnection();
+		String sql = "UPDATE estudiante SET nombre =?, apellido=?, telefono= ?, email= ?"
+				+ " WHERE id_estudiante = ?";
+		try {
+			statement = con.prepareStatement(sql);
+			statement.setString(1, estudiante.getNombre());
+			statement.setString(2, estudiante.getApellido());
+			statement.setString(3, estudiante.getTelefono());
+			statement.setString(4, estudiante.getTelefono());
+			statement.setInt(5, estudiante.getIdEstudiante());
+			var modificados = statement.executeUpdate();
+			if (modificados >0){
+				System.out.println("Estudiante modificado!");
+				System.out.println(estudiante);
+			} else {
+				System.out.println("No se pudo modficar al estudiante");
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("Ocurrió un error al modificar los datos: " +e.getMessage());
+		}
 	}
 	
 	//test
@@ -115,13 +139,17 @@ public class EstudianteDAO {
 		var estudianteDao = new EstudianteDAO();
 		//var id = 3;
 		//Listamos los estudiantes
-		//List<Estudiante> estudiantes = estudianteDao.listarEstudiantes();
-		//estudiantes.forEach(System.out::println);
+		System.out.println("Listado de Estudiantes");
+		List<Estudiante> estudiantes = estudianteDao.listarEstudiantes();
+		estudiantes.forEach(System.out::println);
 		//estudianteDao.buscarEstudiantePorId(id);
 		//var estudianteNuevo = new Estudiante("Gianluca", "Scalvenzi", "4889632", "gian@gmail.com");
 		//estudianteDao.agregarEstudiante(estudianteNuevo);
+		var estudianteModificado = 
+				new Estudiante(3,"Morena", "Scalvenzi", "4632353", "more@gmail.com");
+		estudianteDao.modificarEstudiante(estudianteModificado);
 		System.out.println("Listado de Estudiantes");
-		List<Estudiante> estudiantes = estudianteDao.listarEstudiantes();
+		estudiantes = estudianteDao.listarEstudiantes();
 		estudiantes.forEach(System.out::println);
 	}
 	
