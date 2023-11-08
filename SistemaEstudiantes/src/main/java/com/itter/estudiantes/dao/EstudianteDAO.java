@@ -78,21 +78,51 @@ public class EstudianteDAO {
 		return false;
 	}
 	
+	public void agregarEstudiante(Estudiante estudiante) {
+		PreparedStatement statement;
+		//ResultSet resultSet;
+		Connection con = getConnection();
+		String sql = "INSERT INTO estudiante (nombre, apellido, telefono, email) VALUES (?,?,?,?)";
+		try {
+			statement = con.prepareStatement(sql);
+			statement.setString(1, estudiante.getNombre());
+			statement.setString(2, estudiante.getApellido());
+			statement.setString(3, estudiante.getTelefono());
+			statement.setString(4, estudiante.getTelefono());
+			int agregados = statement.executeUpdate();
+			//resultSet = statement.getGeneratedKeys();
+			 if (agregados >0){
+				System.out.println("Estudiante agregado!");
+				System.out.println(estudiante);
+			} else {
+				System.out.println("No se pudo agregar al estudiante");
+			}
+		} catch (SQLException e) {
+			System.out.println("Ocurrió un error al agregar los datos: " +e.getMessage());
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				System.out.println("Error al cerrar la conexión : " +e.getMessage());;
+			}
+		}
+		
+		
+	}
+	
 	//test
 	public static void main(String[] args) {
 		var estudianteDao = new EstudianteDAO();
-		var id = 3;
+		//var id = 3;
 		//Listamos los estudiantes
+		//List<Estudiante> estudiantes = estudianteDao.listarEstudiantes();
+		//estudiantes.forEach(System.out::println);
+		//estudianteDao.buscarEstudiantePorId(id);
+		//var estudianteNuevo = new Estudiante("Gianluca", "Scalvenzi", "4889632", "gian@gmail.com");
+		//estudianteDao.agregarEstudiante(estudianteNuevo);
+		System.out.println("Listado de Estudiantes");
 		List<Estudiante> estudiantes = estudianteDao.listarEstudiantes();
 		estudiantes.forEach(System.out::println);
-		estudianteDao.buscarEstudiantePorId(id);
-//		if(encontrado) {
-//			System.out.println("Esudiante encontrado!");
-//			System.out.println("El ID n° " +id+ " corresponde al estudiante : ");
-//		} else {
-//			System.out.println("No se encuentra un estudiante con el ID " +id);
-//		}
-//		
 	}
 	
 }
