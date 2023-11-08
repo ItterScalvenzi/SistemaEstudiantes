@@ -9,6 +9,7 @@ import java.util.List;
 import static com.itter.estudiantes.conexion.Conexion.getConnection;
 
 import com.itter.estudiantes.dominio.Estudiante;
+import com.mysql.cj.x.protobuf.MysqlxPrepare.Prepare;
 
 public class EstudianteDAO {
 
@@ -112,8 +113,8 @@ public class EstudianteDAO {
 		PreparedStatement statement;
 		
 		Connection con = getConnection();
-		String sql = "UPDATE estudiante SET nombre =?, apellido=?, telefono= ?, email= ?"
-				+ " WHERE id_estudiante = ?";
+		String sql = "UPDATE estudiante SET nombre=?, apellido=?, telefono=?, email=?"
+				+ " WHERE id_estudiante=?";
 		try {
 			statement = con.prepareStatement(sql);
 			statement.setString(1, estudiante.getNombre());
@@ -134,6 +135,24 @@ public class EstudianteDAO {
 		}
 	}
 	
+	public void eliminarEstudiante(int id) {
+		PreparedStatement statement;
+		Connection con = getConnection();
+		String sql = "DELETE FROM estudiante WHERE id_estudiante=?";
+		try {
+			statement = con.prepareStatement(sql);
+			statement.setInt(1, id);
+			var eliminados = statement.executeUpdate();
+			if (eliminados >0){
+				System.out.println("Se eliminó el estudiante de ID " +id);
+			} else {
+				System.out.println("No se pudo eliminar el estudiante de ID " +id);
+			}
+		} catch (SQLException e) {
+			System.out.println("Error al eliminar estudiante: " +e.getMessage());
+		}
+	}
+	
 	//test
 	public static void main(String[] args) {
 		var estudianteDao = new EstudianteDAO();
@@ -145,9 +164,10 @@ public class EstudianteDAO {
 		//estudianteDao.buscarEstudiantePorId(id);
 		//var estudianteNuevo = new Estudiante("Gianluca", "Scalvenzi", "4889632", "gian@gmail.com");
 		//estudianteDao.agregarEstudiante(estudianteNuevo);
-		var estudianteModificado = 
-				new Estudiante(3,"Morena", "Scalvenzi", "4632353", "more@gmail.com");
-		estudianteDao.modificarEstudiante(estudianteModificado);
+//		var estudianteModificado = 
+//				new Estudiante(3,"Morena", "Scalvenzi", "4632353", "more@gmail.com");
+//		estudianteDao.modificarEstudiante(estudianteModificado);
+		estudianteDao.eliminarEstudiante(4);
 		System.out.println("Listado de Estudiantes");
 		estudiantes = estudianteDao.listarEstudiantes();
 		estudiantes.forEach(System.out::println);
