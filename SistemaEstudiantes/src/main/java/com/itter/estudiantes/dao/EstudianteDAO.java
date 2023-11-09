@@ -1,15 +1,15 @@
 package com.itter.estudiantes.dao;
 
+import static com.itter.estudiantes.conexion.Conexion.getConnection;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import static com.itter.estudiantes.conexion.Conexion.getConnection;
 
 import com.itter.estudiantes.dominio.Estudiante;
-import com.mysql.cj.x.protobuf.MysqlxPrepare.Prepare;
 
 public class EstudianteDAO {
 
@@ -63,6 +63,7 @@ public class EstudianteDAO {
 				var email = resultSet.getString("email");
 				var estudiante = new Estudiante(id, nombre, apellido, telefono, email);
 				System.out.println("Estudiante encontrado con el ID " +id);
+				System.out.println("\tId \tNombre \t\tApellido \tTelefono \tEmail");
 				System.out.println(estudiante);
 				return true;
 			} else
@@ -89,11 +90,12 @@ public class EstudianteDAO {
 			statement.setString(1, estudiante.getNombre());
 			statement.setString(2, estudiante.getApellido());
 			statement.setString(3, estudiante.getTelefono());
-			statement.setString(4, estudiante.getTelefono());
+			statement.setString(4, estudiante.getEmail());
 			int agregados = statement.executeUpdate();
 			//resultSet = statement.getGeneratedKeys();
 			 if (agregados >0){
 				System.out.println("Estudiante agregado!");
+				System.out.println("\tId \tNombre \tApellido \tTelefono \tEmail");
 				System.out.println(estudiante);
 			} else {
 				System.out.println("No se pudo agregar al estudiante");
@@ -120,11 +122,12 @@ public class EstudianteDAO {
 			statement.setString(1, estudiante.getNombre());
 			statement.setString(2, estudiante.getApellido());
 			statement.setString(3, estudiante.getTelefono());
-			statement.setString(4, estudiante.getTelefono());
+			statement.setString(4, estudiante.getEmail());
 			statement.setInt(5, estudiante.getIdEstudiante());
 			var modificados = statement.executeUpdate();
 			if (modificados >0){
 				System.out.println("Estudiante modificado!");
+				System.out.println("\tId \tNombre \t\tApellido \tTelefono \tEmail");
 				System.out.println(estudiante);
 			} else {
 				System.out.println("No se pudo modficar al estudiante");
@@ -154,23 +157,23 @@ public class EstudianteDAO {
 	}
 	
 	//test
-	public static void main(String[] args) {
-		var estudianteDao = new EstudianteDAO();
-		//var id = 3;
-		//Listamos los estudiantes
-		System.out.println("Listado de Estudiantes");
-		List<Estudiante> estudiantes = estudianteDao.listarEstudiantes();
-		estudiantes.forEach(System.out::println);
-		//estudianteDao.buscarEstudiantePorId(id);
-		//var estudianteNuevo = new Estudiante("Gianluca", "Scalvenzi", "4889632", "gian@gmail.com");
-		//estudianteDao.agregarEstudiante(estudianteNuevo);
-//		var estudianteModificado = 
-//				new Estudiante(3,"Morena", "Scalvenzi", "4632353", "more@gmail.com");
-//		estudianteDao.modificarEstudiante(estudianteModificado);
-		estudianteDao.eliminarEstudiante(4);
-		System.out.println("Listado de Estudiantes");
-		estudiantes = estudianteDao.listarEstudiantes();
-		estudiantes.forEach(System.out::println);
-	}
+//	public static void main(String[] args) {
+//		var estudianteDao = new EstudianteDAO();
+//		//var id = 3;
+//		//Listamos los estudiantes
+//		System.out.println("Listado de Estudiantes");
+//		List<Estudiante> estudiantes = estudianteDao.listarEstudiantes();
+//		estudiantes.forEach(System.out::println);
+//		//estudianteDao.buscarEstudiantePorId(id);
+//		//var estudianteNuevo = new Estudiante("Gianluca", "Scalvenzi", "4889632", "gian@gmail.com");
+//		//estudianteDao.agregarEstudiante(estudianteNuevo);
+////		var estudianteModificado = 
+////				new Estudiante(3,"Morena", "Scalvenzi", "4632353", "more@gmail.com");
+////		estudianteDao.modificarEstudiante(estudianteModificado);
+//		estudianteDao.eliminarEstudiante(4);
+//		System.out.println("Listado de Estudiantes");
+//		estudiantes = estudianteDao.listarEstudiantes();
+//		estudiantes.forEach(System.out::println);
+//	}
 	
 }
